@@ -92,7 +92,6 @@
                 //correct answer from the first attempt
                 expr().state = "correctAnswerEntered"
                 pushAndKeepLast5(expr().lastResults, true)
-                updateStats()
                 //keep the green result
 
             }
@@ -116,7 +115,6 @@
             if (expr().state === "demonstrated") {
                 expr().state = "incorrectAnswerAccepted"
                 pushAndKeepLast5(expr().lastResults, false)
-                updateStats()
             } else if (expr().state === "incorrectAnswerAccepted") {
                 //do nothing until correct answer is provided
             }
