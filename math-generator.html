@@ -36,12 +36,16 @@
     }
     function expr() { return knowledge[expressionIndex] }
 
+    let autoConfirmationTimeoutId = 0
+
 
     answer.addEventListener('keydown', function (event) {
         if (event.key === 'Enter') {
             onEnter()
         } else {
-            answer.style.color = ""
+            if (expr().state === "incorrectAnswerAccepted") {
+                answer.style.color = ""
+            }
         }
     });
 
@@ -61,6 +65,9 @@
 
             expression.textContent = `${expr().left} × ${expr().right} = `
             answer.value = ""
+            answer.readOnly = false
+            answer.style.color = ""
+
             expr().state = "demonstrated"
 
             updateStats()
@@ -93,13 +100,17 @@
                 expr().state = "correctAnswerEntered"
                 pushAndKeepLast5(expr().lastResults, true)
                 //keep the green result
-
+                answer.readOnly = true
+                scheduleAutoConfirmation()
             }
             else if (expr().state === "incorrectAnswerAccepted") {
                 expr().state = "correctAnswerEntered"
                 //keep the green result
+                answer.readOnly = true
+                scheduleAutoConfirmation()
             }
             else if (expr().state === "correctAnswerEntered") {
+                cancelAutoConfirmation()
                 if (!expr().lastResults.includes(false)) {
                     // correct answer from the the first attempt
                     // or last 5 attempts are correct
@@ -120,6 +131,22 @@
             }
 
         }
+    }
+
+    function cancelAutoConfirmation() {
+        if (autoConfirmationTimeoutId != null) {
+            clearTimeout(autoConfirmationTimeoutId)
+            autoConfirmationTimeoutId = null
+        }
+    }
+    function scheduleAutoConfirmation() {
+        if (autoConfirmationTimeoutId != null) {
+            clearTimeout(autoConfirmationTimeoutId)
+            autoConfirmationTimeoutId = null
+        }
+        autoConfirmationTimeoutId = setTimeout(() => {
+            onEnter()
+        }, 750);
     }
 </script>
 
