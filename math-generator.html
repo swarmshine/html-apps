@@ -23,6 +23,18 @@
     let firstArgument
     let secondArgument
 
+    let knowledge = []
+    for (let left = 2; left <= 9; left++) {
+        for (let right = 2; right <= 9; right++) {
+            knowledge.push({
+                left: left,
+                right: right,
+                lastShowedTime: 0,
+                lastThreeResults: []
+            })
+        }
+    }
+
     answer.addEventListener('keydown', function (event) {
         if (event.key === 'Enter') {
             onEnter()
@@ -34,9 +46,12 @@
     generateNewExpression()
 
     function generateNewExpression() {
+        let min = 2
         let max = 9
-        firstArgument = Math.floor(Math.random() * (max + 1))
-        secondArgument = Math.floor(Math.random() * (max + 1))
+        function random() { return min + Math.floor(Math.random() * (max - min + 1)) }
+
+        firstArgument = random()
+        secondArgument = random()
 
         expression.textContent = `${firstArgument} × ${secondArgument} = `
         answer.value = ""
@@ -45,7 +60,7 @@
 
     function onEnter() {
         if (answer.value == firstArgument * secondArgument) {
-            if(answer.style.color != "green"){
+            if (answer.style.color != "green") {
                 answer.style.color = "green"
             } else {
                 generateNewExpression()
@@ -55,66 +70,6 @@
         }
 
     }
-
-    function showAnswer() {
-        expression.textContent = `${firstArgument} * ${secondArgument} = ${firstArgument + secondArgument}`
-        scoreChangeTimestamp = Date.now()
-        score++
-        refreshScore()
-        window.setTimeout(showNext, 600)
-    }
-
-    function showNext() {
-        console.log("show next")
-
-        let max
-        if (maxConstraint.value) {
-            max = parseInt(maxConstraint.value)
-        } else {
-            max = 9
-        }
-
-        //[0,1) -> [0,9)
-        firstArgument = Math.floor(Math.random() * (max + 1))
-        secondArgument = Math.floor(Math.random() * (max + 1))
-
-        if (leftConstraint.value) {
-            firstArgument = parseInt(leftConstraint.value)
-        }
-
-        if (rightConstraint.value) {
-            firstArgument = parseInt(leftConstraint.value)
-        }
-        expression.textContent = `${firstArgument} + ${secondArgument} = `
-    }
-
-    function refreshScore() {
-        progress.max = maxScore
-
-        if (!speedElement.value) {
-            speedElement.value = 2000
-        }
-
-        let scoreBurnTimeout = parseInt(speedElement.value)
-
-
-
-        let now = Date.now()
-
-        if (now - scoreChangeTimestamp > scoreBurnTimeout) {
-            burned = Math.floor((Date.now() - scoreChangeTimestamp) / scoreBurnTimeout)
-
-            scoreChangeTimestamp += burned * scoreBurnTimeout
-            score = Math.max(0, score - burned)
-        }
-
-        console.log("score = " + score);
-
-
-        progress.value = score
-        scoreElement.textContent = score
-    }
-
 </script>
 
 </html>
