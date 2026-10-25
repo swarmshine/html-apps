@@ -43,11 +43,19 @@
         if (event.key === 'Enter') {
             onEnter()
         } else {
-            if (expr().state === "incorrectAnswerAccepted") {
+            if (answer.style.color != null && answer.style.color != "" &&
+                (expr().state === "incorrectAnswerAccepted" || expr().state === "demonstrated")) {
                 answer.style.color = ""
             }
         }
     });
+
+    answer.addEventListener('beforeinput', (event) => {
+        if (expr().state === "correctAnswerEntered") {
+            event.preventDefault()
+        }
+    });
+
 
     selectNewExpression()
 
