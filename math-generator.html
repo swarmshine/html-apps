@@ -48,15 +48,28 @@
     selectNewExpression()
 
     function selectNewExpression() {
-        expressionIndex = random(0, Math.min(9, knowledge.length))
+        if (knowledge.length == 0) {
+            expression.textContent = "Win!"
+            expression.style.color = "green"
+        } else if (knowledge.length == 1) {
+            expressionIndex = 0
+        } else {
+            let prevExpressionIndex = expressionIndex
+            do {
+                expressionIndex = random(0, Math.min(9, knowledge.length - 1))
+            } while (expressionIndex == prevExpressionIndex)
 
-        expression.textContent = `${expr().left} × ${expr().right} = `
-        answer.value = ""
-        expr().state = "demonstrated"
+            expression.textContent = `${expr().left} × ${expr().right} = `
+            answer.value = ""
+            expr().state = "demonstrated"
 
-        knowledgeElement.textContent = `Left: ${knowledge.length}`
+            updateStats()
+        }
     }
 
+    function updateStats() {
+        knowledgeElement.textContent = `${knowledge.length}/${knowledge.filter(e => e.lastResults.length > 0).length}`
+    }
 
     function random(min, max) {
         return min + Math.floor(Math.random() * (max - min + 1))
@@ -79,6 +92,7 @@
                 //correct answer from the first attempt
                 expr().state = "correctAnswerEntered"
                 pushAndKeepLast5(expr().lastResults, true)
+                updateStats()
                 //keep the green result
 
             }
@@ -102,13 +116,12 @@
             if (expr().state === "demonstrated") {
                 expr().state = "incorrectAnswerAccepted"
                 pushAndKeepLast5(expr().lastResults, false)
+                updateStats()
             } else if (expr().state === "incorrectAnswerAccepted") {
                 //do nothing until correct answer is provided
             }
 
         }
-
-        console.log(knowledge)
     }
 </script>
 
