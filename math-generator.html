@@ -65,7 +65,6 @@
 
             expression.textContent = `${expr().left} × ${expr().right} = `
             answer.value = ""
-            answer.readOnly = false
             answer.style.color = ""
 
             expr().state = "demonstrated"
@@ -100,13 +99,11 @@
                 expr().state = "correctAnswerEntered"
                 pushAndKeepLast5(expr().lastResults, true)
                 //keep the green result
-                answer.readOnly = true
                 scheduleAutoConfirmation()
             }
             else if (expr().state === "incorrectAnswerAccepted") {
                 expr().state = "correctAnswerEntered"
                 //keep the green result
-                answer.readOnly = true
                 scheduleAutoConfirmation()
             }
             else if (expr().state === "correctAnswerEntered") {
