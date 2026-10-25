@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- Reload the page -->
+<!-- <meta http-equiv="Refresh" content="1"/> -->
+
+<head>
+    <meta charset="UTF-8">
+    <title>Math generator</title>
+</head>
+
+<body style="font-size: 6vw;">
+
+    <div>
+        <span id="expression" style="font-size: 20vw;"></span>
+        <input id="answer" type="number" style="font-size: 20vw;">
+    </div>
+</body>
+<script>
+    let expression = document.getElementById("expression")
+    let answer = document.getElementById("answer")
+    let prevAnswer = document.getElementById("prevAnswer")
+
+    let firstArgument
+    let secondArgument
+
+    answer.addEventListener('keydown', function (event) {
+        if (event.key === 'Enter') {
+            onEnter()
+        } else {
+            answer.style.color = ""
+        }
+    });
+
+    generateNewExpression()
+
+    function generateNewExpression() {
+        let max = 9
+        firstArgument = Math.floor(Math.random() * (max + 1))
+        secondArgument = Math.floor(Math.random() * (max + 1))
+
+        expression.textContent = `${firstArgument} × ${secondArgument} = `
+        answer.value = ""
+
+    }
+
+    function onEnter() {
+        if (answer.value == firstArgument * secondArgument) {
+            if(answer.style.color != "green"){
+                answer.style.color = "green"
+            } else {
+                generateNewExpression()
+            }
+        } else {
+            answer.style.color = "red"
+        }
+
+    }
+
+    function showAnswer() {
+        expression.textContent = `${firstArgument} * ${secondArgument} = ${firstArgument + secondArgument}`
+        scoreChangeTimestamp = Date.now()
+        score++
+        refreshScore()
+        window.setTimeout(showNext, 600)
+    }
+
+    function showNext() {
+        console.log("show next")
+
+        let max
+        if (maxConstraint.value) {
+            max = parseInt(maxConstraint.value)
+        } else {
+            max = 9
+        }
+
+        //[0,1) -> [0,9)
+        firstArgument = Math.floor(Math.random() * (max + 1))
+        secondArgument = Math.floor(Math.random() * (max + 1))
+
+        if (leftConstraint.value) {
+            firstArgument = parseInt(leftConstraint.value)
+        }
+
+        if (rightConstraint.value) {
+            firstArgument = parseInt(leftConstraint.value)
+        }
+        expression.textContent = `${firstArgument} + ${secondArgument} = `
+    }
+
+    function refreshScore() {
+        progress.max = maxScore
+
+        if (!speedElement.value) {
+            speedElement.value = 2000
+        }
+
+        let scoreBurnTimeout = parseInt(speedElement.value)
+
+
+
+        let now = Date.now()
+
+        if (now - scoreChangeTimestamp > scoreBurnTimeout) {
+            burned = Math.floor((Date.now() - scoreChangeTimestamp) / scoreBurnTimeout)
+
+            scoreChangeTimestamp += burned * scoreBurnTimeout
+            score = Math.max(0, score - burned)
+        }
+
+        console.log("score = " + score);
+
+
+        progress.value = score
+        scoreElement.textContent = score
+    }
+
+</script>
+
+</html>
