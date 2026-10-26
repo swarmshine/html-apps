@@ -10,15 +10,17 @@
 
 <body style="font-size: 6vw;">
 
-    <div>
+    <span>
         <span id="expression" style="font-size: 20vw;"></span>
-        <input id="answer" type="number" style="font-size: 20vw;">
+        <input id="answer" type="number" style="font-size: 20vw; width: 3ch;">
+        <span id="correctAnswer" style="font-size: 20vw;"></span>
         <span id="knowledge" style="font-size: 10vw;"></span>
-    </div>
+    </span>
 </body>
 <script>
     let expression = document.getElementById("expression")
     let answer = document.getElementById("answer")
+    let correctAnswer = document.getElementById("correctAnswer")
     let knowledgeElement = document.getElementById("knowledge")
 
     let expressionIndex
@@ -71,9 +73,10 @@
                 expressionIndex = random(0, Math.min(9, knowledge.length - 1))
             } while (expressionIndex == prevExpressionIndex)
 
-            expression.textContent = `${expr().left} × ${expr().right} = `
+            expression.textContent = `${expr().left}×${expr().right}=`
             answer.value = ""
             answer.style.color = ""
+            correctAnswer.value = ""
 
             expr().state = "demonstrated"
 
@@ -101,6 +104,7 @@
         if (answer.value == expr().left * expr().right) {
             //correct answer
             answer.style.color = "green"
+            correctAnswer.textContent = ""
 
             if (expr().state === "demonstrated") {
                 //correct answer from the first attempt
@@ -127,6 +131,7 @@
         } else {
             // incorrect answer
             answer.style.color = "red"
+            correctAnswer.textContent = expr().left * expr().right
 
             if (expr().state === "demonstrated") {
                 expr().state = "incorrectAnswerAccepted"
