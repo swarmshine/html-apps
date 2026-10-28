@@ -8,9 +8,24 @@
     <title>Math generator</title>
 </head>
 
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+    }
+
+    .viewport {
+        box-sizing: border-box;
+        width: 100vw;
+        height: 100vh;
+        border: 1px solid red;
+    }
+</style>
+
 <body>
     <!-- clamp(1rem, 4vmin, 20vw) -->
-    <div style="display: block; text-fit: grow consistent;">
+     <!-- try to use cqs? -->
+    <div class="viewport" style="display: block; text-fit: grow consistent;">
         <span id="expression" style=""></span>
         <input id="answer" type="number" style="width: 3ch;">
         <span id="correctAnswer" style=""></span>
