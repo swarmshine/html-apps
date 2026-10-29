@@ -14,22 +14,54 @@
         padding: 0;
     }
 
-    .viewport {
+    .container {
+        /* no scrolls */
         box-sizing: border-box;
+        container-type: inline-size;
         width: 100vw;
         height: 100vh;
         border: 1px solid red;
     }
+
+    .expression,
+    .expression input {
+        font-size: min(15vw, 85vh)
+            /* text-fit: grow consistent; */
+            /* c clamp(1rem, 100vw, 100vw);  */
+            /* font-size: clamp(1rem, min(100cqh, 100cqw, 100cqi, 100cqb), 100vw); */
+    }
 </style>
 
 <body>
+    <!-- font-size: clamp(1.5rem, calc(2cqw + 3cqh), 4rem);
+
+    font-size: clamp(1rem, min(var(--cow), var(--cqa)), 3rem);
+
+
+ -->
+    <!-- 1 cqi = 1% of the container's inline width -->
     <!-- clamp(1rem, 4vmin, 20vw) -->
-     <!-- try to use cqs? -->
-    <div class="viewport" style="display: block; text-fit: grow consistent;">
-        <span id="expression" style=""></span>
-        <input id="answer" type="number" style="width: 3ch;">
-        <span id="correctAnswer" style=""></span>
-        <span id="knowledge" style=""></span>
+    <!-- try to use cqs? -->
+    <!-- .container {
+        /* 1. Tell the browser to observe this container's inline size (width) */
+        container-type: inline-size; 
+        width: 100%;
+        }
+
+        .text {
+        /* 2. Scale font size fluidly using container query units (cqi) */
+        font-size: clamp(1rem, 5cqi, 3rem);
+
+
+        style="display: block; text-fit: grow consistent;"
+} -->
+    <div class="container">
+        <div class="expression">
+            <span id="expression"></span>
+            <input id="answer" type="number" style="width: 3ch;">
+            <span id="correctAnswer"></span>
+            <span id="knowledge"></span>
+        </div>
     </div>
 </body>
 <script>
